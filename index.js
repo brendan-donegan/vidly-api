@@ -15,7 +15,7 @@ if (!config.get("jwtPrivateKey")) {
 }
 
 mongoose
-  .connect("mongodb://localhost/vidly", {
+  .connect(config.get("db"), {
     useNewUrlParser: true,
     useFindAndModify: false,
     useUnifiedTopology: true,
