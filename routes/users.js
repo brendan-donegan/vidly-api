@@ -9,17 +9,18 @@ router.post("/", async (req, res, body) => {
   if (user) {
     return res.status(400).send("User already registered");
   }
+  const { name, email, password } = req.body;
   user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
+    name,
+    email,
+    password,
   });
   try {
     await user.save();
   } catch (ex) {
     return res.status(500).send(ex.message);
   }
-  res.send(user);
+  res.send({ name: user.name, email: user.email });
 });
 
 module.exports = router;
