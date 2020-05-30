@@ -18,13 +18,13 @@ const Customer = mongoose.model(
 );
 
 function validateCustomer(customer) {
-  const schema = {
+  const schema = Joi.object({
     name: Joi.string().required(),
     phone: Joi.string().required(),
     isGold: Joi.boolean(),
-  };
+  });
 
-  return Joi.validate(customer, schema);
+  return schema.validate(customer);
 }
 
 exports.Customer = Customer;
