@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 const router = express.Router();
 const { User, validate } = require("../models/user");
 
@@ -15,6 +16,10 @@ router.post("/", async (req, res, body) => {
     email,
     password,
   });
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+
   try {
     await user.save();
   } catch (ex) {
