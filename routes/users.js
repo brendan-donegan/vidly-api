@@ -25,7 +25,10 @@ router.post("/", async (req, res, body) => {
   } catch (ex) {
     return res.status(500).send(ex.message);
   }
-  res.send({ name: user.name, email: user.email });
+  const token = user.generateAuthToken();
+  res
+    .header("x-auth-token", token)
+    .send({ name: user.name, email: user.email });
 });
 
 module.exports = router;
