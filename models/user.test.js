@@ -6,6 +6,7 @@ describe("validate user", () => {
       name: "Luke Skywalker",
       email: "luke@rebellion.com",
       password: "usetheforce",
+      isAdmin: false,
     };
     const { value } = validate(user);
     expect(value).toMatchObject(user);
@@ -25,6 +26,17 @@ describe("validate user", () => {
       name: "Han Solo",
       email: "han",
       password: "nevertellmetheodds",
+    };
+    const { error } = validate(user);
+    expect(error).toBeTruthy();
+  });
+
+  it("fails if isAdmin is not a boolean", () => {
+    const user = {
+      name: "Max Veers",
+      email: "max.veers@empire.com",
+      password: "rebelbase",
+      isAdmin: "TrueDat",
     };
     const { error } = validate(user);
     expect(error).toBeTruthy();

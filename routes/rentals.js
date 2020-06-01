@@ -1,3 +1,4 @@
+const auth = require("../middleware/auth");
 const express = require("express");
 const mongoose = require("mongoose");
 const Fawn = require("fawn");
@@ -8,7 +9,7 @@ const { Movie } = require("../models/movie");
 
 Fawn.init(mongoose);
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (errpr) {
     return res.status(400).send(error.details[0].message);

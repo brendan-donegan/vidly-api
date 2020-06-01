@@ -1,3 +1,4 @@
+const auth = require("../middleware/auth");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
@@ -29,6 +30,14 @@ router.post("/", async (req, res, body) => {
   res
     .header("x-auth-token", token)
     .send({ name: user.name, email: user.email });
+});
+
+router.get("/me", auth, async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password -__v");
+  if (!user) {
+    return res.status(500).send("Something went wrong, unable to find user");
+  }
+  res.send(user);
 });
 
 module.exports = router;
