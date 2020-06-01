@@ -13,7 +13,7 @@ router.get("/", async function handleGetGenres(req, res) {
   }
 });
 
-router.post("/", [auth, admin], async function handleCreateGenre(req, res) {
+router.post("/", auth, async function handleCreateGenre(req, res) {
   // Validate the payload
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -29,7 +29,7 @@ router.post("/", [auth, admin], async function handleCreateGenre(req, res) {
   }
 });
 
-router.put("/:id", auth, async function handleUpdateGenre(req, res) {
+router.put("/:id", [auth, admin], async function handleUpdateGenre(req, res) {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   try {
@@ -43,7 +43,10 @@ router.put("/:id", auth, async function handleUpdateGenre(req, res) {
   }
 });
 
-router.delete("/:id", auth, async function handleDeleteGenre(req, res) {
+router.delete("/:id", [auth, admin], async function handleDeleteGenre(
+  req,
+  res
+) {
   try {
     const genre = await Genre.findByIdAndRemove(req.params.id);
     if (!genre) res.status(404).send();
