@@ -19,7 +19,7 @@ router.post("/", auth, async (req, res) => {
     name: req.body.name,
   });
   const created = await genre.save();
-  res.send(created);
+  res.status(201).send(created);
 });
 
 router.put("/:id", [auth, admin, validId], async (req, res, next) => {
