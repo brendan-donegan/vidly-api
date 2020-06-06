@@ -5,26 +5,18 @@ const router = express.Router();
 const { Customer, validate } = require("../models/customer");
 
 router.get("/", async (req, res) => {
-  try {
-    const customers = await Customer.find().sort("name");
-    res.send(customers);
-  } catch (ex) {
-    res.status(500).send(ex.message);
-  }
+  const customers = await Customer.find().sort("name");
+  res.send(customers);
 });
 
 router.get("/:id", async (req, res) => {
-  try {
-    const customer = await Customer.findById(req.params.id);
-    if (!customer) {
-      return res
-        .status(404)
-        .send(`Could not find customer with ID ${req.params.id}`);
-    }
-    res.send(customer);
-  } catch (ex) {
-    res.status(500).send(ex.message);
+  const customer = await Customer.findById(req.params.id);
+  if (!customer) {
+    return res
+      .status(404)
+      .send(`Could not find customer with ID ${req.params.id}`);
   }
+  res.send(customer);
 });
 
 router.post("/", auth, async (req, res) => {

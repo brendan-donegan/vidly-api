@@ -12,7 +12,7 @@ describe("/api/auth", () => {
     // clean up any test users that were created
     await User.deleteMany({});
   });
-  describe("POST /", async () => {
+  describe("POST /", () => {
     it("returns a token if the login credentials are correct", async () => {
       const user = new User({
         name: "luke skywalker",

@@ -61,7 +61,6 @@ describe("/api/movies", () => {
       await movie.save();
       const res = await supertest(server).get(`/api/movies/${movie._id}`);
       expect(res.status).toBe(200);
-      console.log(res.body);
       expect(res.body).toMatchObject({
         title: "Empire Strikes Back",
         genre: {
