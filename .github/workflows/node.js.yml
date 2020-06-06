@@ -9,9 +9,6 @@ on:
   pull_request:
     branches: [master]
 
-env:
-  CODECOV_TOKEN: f4d7f5a6-8dc4-4fbd-803f-f21d009abf38
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,5 +31,4 @@ jobs:
           mongodb-replica-set: insert-replica-set-name
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm run test:coverage
-      - run: bash <(curl -s https://codecov.io/bash)
+      - run: npm test
