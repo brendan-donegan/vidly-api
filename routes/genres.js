@@ -13,7 +13,9 @@ router.get("/", async (req, res) => {
 router.post("/", auth, async (req, res) => {
   // Validate the payload
   const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
   // Create the genre in the database
   const genre = new Genre({
     name: req.body.name,
@@ -38,7 +40,9 @@ router.put("/:id", [auth, admin, validId], async (req, res, next) => {
 
 router.delete("/:id", [auth, admin, validId], async (req, res, next) => {
   const genre = await Genre.findByIdAndRemove(req.params.id);
-  if (!genre) res.status(404).send();
+  if (!genre) {
+    return res.status(404).send();
+  }
   res.send(genre);
 });
 

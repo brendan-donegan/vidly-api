@@ -61,7 +61,6 @@ describe("/api/movies", () => {
       await movie.save();
       const res = await supertest(server).get(`/api/movies/${movie._id}`);
       expect(res.status).toBe(200);
-      console.log(res.body);
       expect(res.body).toMatchObject({
         title: "Empire Strikes Back",
         genre: {
@@ -166,6 +165,15 @@ describe("/api/movies", () => {
       expect(res.body).toMatchObject({ title: "Rogue One: A Star Wars Story" });
     });
 
+    it("should return 400 if the payload is not valid", async () => {
+      const res = await updateMovie("5ed2d0366f87ac0017f72629", {
+        title: "Fee",
+        genreId: "5ed2d0366f87ac0017f72629",
+        numberInStock: -1,
+      });
+      expect(res.status).toBe(400);
+    });
+
     it("should update the movie genre if a different genreId is provided", async () => {
       const genre = new Genre({ name: "Terrible" });
       await genre.save();
@@ -194,6 +202,70 @@ describe("/api/movies", () => {
         numberInStock: 12,
         dailyRentalRate: 1,
       });
+    });
+
+    it("should return 404 if the movie does not exist", async () => {
+      const res = await updateMovie("5eae94be025d711a205b3671", {
+        title: "Return of the Jedi",
+        genreId: "5eae94be025d711a205b3671",
+        numberInStock: 1,
+        dailyRentalRate: 5,
+      });
+      expect(res.status).toBe(404);
+      expect(res.text).toBe(
+        "Could not find movie with id 5eae94be025d711a205b3671"
+      );
+    });
+
+    it("should return 404 if the new genreId does not exist", async () => {
+      const movie = new Movie({
+        title: "Solo: A Star Wars Story",
+        genre: {
+          _id: "5ed2d0366f87ac0017f72629",
+          name: "Action",
+        },
+        numberInStock: 12,
+        dailyRentalRate: 1,
+      });
+      await movie.save();
+      const res = await updateMovie(movie._id, {
+        title: "Solo: A Star Wars Story",
+        genreId: "6ed2d0377f87ac0017f72628",
+        numberInStock: 12,
+        dailyRentalRate: 1,
+      });
+      expect(res.status).toBe(404);
+      expect(res.text).toBe(
+        "Could not find genre with id 6ed2d0377f87ac0017f72628"
+      );
+    });
+  });
+
+  describe("DELETE /:id", () => {
+    it("should delete the movie if it exists", async () => {
+      const movie = new Movie({
+        title: "The Phantom Menace",
+        genre: {
+          name: "Science Fiction",
+        },
+        numberInStock: 1,
+        dailyRentalRate: 2,
+      });
+      await movie.save();
+      const token = new User({ isAdmin: true }).generateAuthToken();
+      const res = await supertest(server)
+        .delete(`/api/movies/${movie._id}`)
+        .set("x-auth-token", token);
+      expect(res.status).toBe(200);
+      const deletedMovie = await Movie.findById(movie._id);
+      expect(deletedMovie).toBeNull();
+    });
+
+    it("should return 404 if the movie does not exist", async () => {
+      const token = new User({ isAdmin: true }).generateAuthToken();
+      const res = await supertest(server)
+        .delete(`/api/movies/5ed2d0366f87ac0017f72629`)
+        .set("x-auth-token", token);
     });
   });
 });

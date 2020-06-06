@@ -1,30 +1,23 @@
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
+const validId = require("../middleware/validId");
 const express = require("express");
 const router = express.Router();
 const { Customer, validate } = require("../models/customer");
 
 router.get("/", async (req, res) => {
-  try {
-    const customers = await Customer.find().sort("name");
-    res.send(customers);
-  } catch (ex) {
-    res.status(500).send(ex.message);
-  }
+  const customers = await Customer.find().sort("name");
+  res.send(customers);
 });
 
-router.get("/:id", async (req, res) => {
-  try {
-    const customer = await Customer.findById(req.params.id);
-    if (!customer) {
-      return res
-        .status(404)
-        .send(`Could not find customer with ID ${req.params.id}`);
-    }
-    res.send(customer);
-  } catch (ex) {
-    res.status(500).send(ex.message);
+router.get("/:id", validId, async (req, res) => {
+  const customer = await Customer.findById(req.params.id);
+  if (!customer) {
+    return res
+      .status(404)
+      .send(`Could not find customer with ID ${req.params.id}`);
   }
+  res.send(customer);
 });
 
 router.post("/", auth, async (req, res) => {
@@ -39,49 +32,37 @@ router.post("/", auth, async (req, res) => {
     phone: req.body.phone,
     isGold: req.body.isGold,
   });
-  try {
-    const created = await customer.save();
-    res.send(created);
-  } catch (ex) {
-    res.status(500).send(ex.message);
-  }
+  const created = await customer.save();
+  res.status(201).send(created);
 });
 
-router.put("/:id", [auth, admin], async (req, res) => {
+router.put("/:id", [auth, admin, validId], async (req, res) => {
   // Validate the payload
   const { error } = validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
-  try {
-    const customer = await Customer.findById(req.params.id);
-    if (!customer) {
-      return res
-        .status(404)
-        .send(`Could not find customer with ID ${req.params.id}`);
-    }
-    customer.name = req.body.name;
-    customer.phone = req.body.phone;
-    customer.isGold = req.body.isGold;
-    const newCustomer = await customer.save();
-    res.send(newCustomer);
-  } catch (ex) {
-    res.status(500).send(ex.message);
+  const customer = await Customer.findById(req.params.id);
+  if (!customer) {
+    return res
+      .status(404)
+      .send(`Could not find customer with ID ${req.params.id}`);
   }
+  customer.name = req.body.name;
+  customer.phone = req.body.phone;
+  customer.isGold = req.body.isGold;
+  const newCustomer = await customer.save();
+  res.send(newCustomer);
 });
 
-router.delete("/:id", [auth, admin], async (req, res) => {
-  try {
-    const customer = await Customer.findByIdAndRemove(req.params.id);
-    if (!customer) {
-      return res
-        .status(404)
-        .send(`Could not find customer with ID ${req.params.id}`);
-    }
-    res.send(customer);
-  } catch (ex) {
-    res.status(500).send(ex.message);
+router.delete("/:id", [auth, admin, validId], async (req, res) => {
+  const customer = await Customer.findByIdAndRemove(req.params.id);
+  if (!customer) {
+    return res
+      .status(404)
+      .send(`Could not find customer with ID ${req.params.id}`);
   }
+  res.send(customer);
 });
 
 module.exports = router;
