@@ -1,5 +1,7 @@
 const supertest = require("supertest");
+const { Genre } = require("../../models/genre");
 const { Movie } = require("../../models/movie");
+const { User } = require("../../models/user");
 
 let server;
 
@@ -10,6 +12,7 @@ describe("/api/movies", () => {
 
   afterEach(async () => {
     await Movie.deleteMany({});
+    await Genre.deleteMany({});
   });
 
   describe("GET /", () => {
@@ -81,6 +84,116 @@ describe("/api/movies", () => {
       );
       expect(res.status).toBe(404);
       expect(res.text).toContain("5eae94be025d711a205b3671");
+    });
+  });
+
+  describe("POST /", () => {
+    async function createMovie(
+      payload,
+      token = new User({ isAdmin: true }).generateAuthToken()
+    ) {
+      return supertest(server)
+        .post(`/api/movies`)
+        .set("x-auth-token", token)
+        .send(payload);
+    }
+
+    it("should create a movie if a valid payload is provided and the x-auth-token is provided", async () => {
+      const genre = new Genre({ name: "genre1" });
+      await genre.save();
+
+      const res = await createMovie({
+        title: "Return of the Jedi",
+        genreId: genre._id,
+        numberInStock: 1,
+        dailyRentalRate: 5,
+      });
+      expect(res.status).toBe(201);
+      expect(res.body).toMatchObject({ title: "Return of the Jedi" });
+    });
+
+    it("should return 404 if an invalid or non-existent genreId is provided", async () => {
+      const res = await createMovie({
+        title: "The Force Awakens",
+        genreId: "5ed2d0366f87ac0017f72629",
+        numberInStock: 2,
+        dailyRentalRate: 3,
+      });
+      expect(res.status).toBe(404);
+      expect(res.text).toContain("Could not find genre with id");
+    });
+
+    it("should return 400 if an payload is provided without a title", async () => {
+      const res = await createMovie({
+        genreId: "5ed2d0366f87ac0017f72629",
+        numberInStock: 2,
+        dailyRentalRate: 3,
+      });
+      expect(res.status).toBe(400);
+    });
+  });
+
+  describe("PUT /:id", () => {
+    async function updateMovie(
+      movieId,
+      payload,
+      token = new User({ isAdmin: true }).generateAuthToken()
+    ) {
+      return supertest(server)
+        .put(`/api/movies/${movieId}`)
+        .set("x-auth-token", token)
+        .send(payload);
+    }
+
+    it("should update the movie if the payload is valid and the movie exists", async () => {
+      const movie = new Movie({
+        title: "Rogue One",
+        genre: {
+          _id: "5ed2d0366f87ac0017f72629",
+          name: "Action",
+        },
+        numberInStock: 4,
+        dailyRentalRate: 3,
+      });
+      await movie.save();
+      const res = await updateMovie(movie._id, {
+        title: "Rogue One: A Star Wars Story",
+        numberInStock: 4,
+        genreId: "5ed2d0366f87ac0017f72629",
+        dailyRentalRate: 3,
+      });
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({ title: "Rogue One: A Star Wars Story" });
+    });
+
+    it("should update the movie genre if a different genreId is provided", async () => {
+      const genre = new Genre({ name: "Terrible" });
+      await genre.save();
+      const movie = new Movie({
+        title: "Solo: A Star Wars Story",
+        genre: {
+          _id: "5ed2d0366f87ac0017f72629",
+          name: "Action",
+        },
+        numberInStock: 12,
+        dailyRentalRate: 1,
+      });
+      await movie.save();
+      const res = await updateMovie(movie._id, {
+        title: "Solo: A Star Wars Story",
+        genreId: genre._id,
+        numberInStock: 12,
+        dailyRentalRate: 1,
+      });
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({
+        title: "Solo: A Star Wars Story",
+        genre: {
+          name: "Terrible",
+        },
+        numberInStock: 12,
+        dailyRentalRate: 1,
+      });
     });
   });
 });
