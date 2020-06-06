@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon index.js",
-    "test": "jest --verbose --forceExit",
-    "test:coverage": "jest --coverage"
+    "test": "jest --runInBand --forceExit",
+    "test:coverage": "jest --runInBand --coverage --forceExit"
   },
   "engines": {
     "node": "12.7.0"
