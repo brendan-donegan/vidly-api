@@ -47,5 +47,21 @@ describe("/api/customers", () => {
         isGold: false,
       });
     });
+
+    it("should return 404 if an invalid id was provided", async () => {
+      const res = await supertest(server).get(`/api/customers/foobar`);
+      expect(res.status).toBe(404);
+      expect(res.text).toBe("Invalid ID.");
+    });
+
+    it("should return 404 if a valid but non-existent id is provided", async () => {
+      const res = await supertest(server).get(
+        `/api/customers/5eae94be025d711a205b3671`
+      );
+      expect(res.status).toBe(404);
+      expect(res.text).toBe(
+        "Could not find customer with ID 5eae94be025d711a205b3671"
+      );
+    });
   });
 });
