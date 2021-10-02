@@ -29,6 +29,5 @@ jobs:
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
           mongodb-replica-set: insert-replica-set-name
-      - run: yarn
       - run: yarn test:coverage
       - uses: codecov/codecov-action@v1
