@@ -33,5 +33,10 @@
     "jest": "^26.0.1",
     "supertest": "^4.0.2"
   },
-  "packageManager": "yarn@3.0.2"
+  "packageManager": "yarn@3.0.2",
+  "dependenciesMeta": {
+    "bcrypt@4.0.1": {
+      "unplugged": true
+    }
+  }
 }

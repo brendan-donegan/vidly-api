@@ -6679,6 +6679,9 @@ fsevents@^2.1.2:
     supertest: ^4.0.2
     winston: ^3.2.1
     winston-mongodb: ^5.0.1
+  dependenciesMeta:
+    bcrypt@4.0.1:
+      unplugged: true
   languageName: unknown
   linkType: soft
 
