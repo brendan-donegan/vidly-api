@@ -10,7 +10,7 @@
     "test:coverage": "jest --runInBand --coverage --forceExit"
   },
   "engines": {
-    "node": "12.7.0"
+    "node": "14.13.1"
   },
   "keywords": [],
   "author": "",
