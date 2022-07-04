@@ -11,11 +11,11 @@ router.post("/", async (req, res, body) => {
   if (user) {
     return res.status(400).send("User already registered");
   }
-  const { name, email, password } = req.body;
+  const { n, e, p } = req.body;
   user = new User({
-    name,
-    email,
-    password,
+    n,
+    e,
+    p,
   });
 
   const salt = await bcrypt.genSalt(10);
