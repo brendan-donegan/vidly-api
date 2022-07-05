@@ -21,8 +21,8 @@ const Rental = mongoose.model(
         phone: {
           type: String,
           required: true,
-          minlength: 5,
-          maxlength: 50,
+          minlength: 3,
+          maxlength: 45,
         },
       }),
       required: true,
