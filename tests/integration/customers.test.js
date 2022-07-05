@@ -18,7 +18,7 @@ describe("/api/customers", () => {
       await Customer.collection.insertMany([
         {
           name: "Brendan Donegan",
-          phone: "080111222",
+          phone: "08181115555",
           isGold: true,
         },
         {
