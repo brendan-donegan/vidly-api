@@ -1,12 +1,20 @@
 queue_rules:
-  - name: default
-    conditions: []  # no extra conditions needed to get merged
+  - name: speculative
+    speculative_checks: 5
+    conditions: []
 
 pull_request_rules:
-  - name: merge using the merge queue
+  - name: merge speculatively
     conditions:
       - base=master
-      - label=merge
+      - label=speculative-merge
     actions:
       queue:
-        name: default
+        name: speculative
+  - name: automatic update for PRs to be merged
+    conditions:
+      - -conflict # skip PRs with conflicts
+      - -draft # filter-out GH draft PRs
+      - label=speculative-merge
+    actions:
+      update:

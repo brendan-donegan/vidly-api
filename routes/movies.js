@@ -29,8 +29,8 @@ router.post("/", auth, async (req, res) => {
     numberInStock: req.body.numberInStock,
     dailyRentalRate: req.body.dailyRentalRate,
   });
-  const created = await movie.save();
-  res.status(201).send(created);
+  const createdMovie = await movie.save();
+  res.status(201).send(createdMovie);
 });
 
 router.put("/:id", [auth, admin, validId], async (req, res) => {
