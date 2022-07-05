@@ -1,12 +1,12 @@
 queue_rules:
-  - name: default
-    conditions: []  # no extra conditions needed to get merged
+  - name: speculative
+    conditions: []
 
 pull_request_rules:
-  - name: merge using the merge queue
+  - name: merge speculatively
     conditions:
       - base=master
-      - label=merge
+      - label=speculative-merge
     actions:
       queue:
-        name: default
+        name: speculative
