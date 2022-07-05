@@ -16,7 +16,7 @@ describe("/api/auth", () => {
     it("returns a token if the login credentials are correct", async () => {
       const user = new User({
         name: "luke skywalker",
-        email: "luke@rebellion.com",
+        email: "luke@rebels.com",
         password: "usetheforce",
       });
 
@@ -25,7 +25,7 @@ describe("/api/auth", () => {
       await user.save();
 
       const res = await supertest(server).post(`/api/auth`).send({
-        email: "luke@rebellion.com",
+        email: "luke@rebels.com",
         password: "usetheforce",
       });
       expect(res.status).toBe(200);
