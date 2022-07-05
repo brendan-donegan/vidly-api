@@ -29,7 +29,7 @@ router.post("/", auth, async (req, res) => {
   }
 
   if (movie.numberInStock === 0) {
-    return res.status(400).send("Movie not in stock");
+    return res.status(400).send("Movie not available");
   }
 
   let rental = new Rental({
