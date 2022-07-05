@@ -49,7 +49,7 @@ router.delete("/:id", [auth, admin, validId], async (req, res, next) => {
 router.get("/:id", validId, async (req, res) => {
   const genre = await Genre.findById(req.params.id).select("name");
   if (!genre) {
-    return res.status(404).send(`The genre with the given ID was not found.`);
+    return res.status(404).send(`The genre with the id ${req.params.id} was not found.`);
   }
   res.send(genre);
 });
