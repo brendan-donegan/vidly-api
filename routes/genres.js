@@ -25,9 +25,9 @@ router.post("/", auth, async (req, res) => {
 });
 
 router.put("/:id", [auth, admin, validId], async (req, res, next) => {
-  const { error } = validate(req.body);
-  if (error) {
-    return res.status(400).send(error.details[0].message);
+  const { err } = validate(req.body);
+  if (err) {
+    return res.status(400).send(err.details[0].message);
   }
   const genre = await Genre.findById(req.params.id);
   if (!genre) {
