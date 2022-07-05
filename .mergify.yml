@@ -1,5 +1,6 @@
 queue_rules:
   - name: speculative
+    speculative_checks: 5
     conditions: []
 
 pull_request_rules:
