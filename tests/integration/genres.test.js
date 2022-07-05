@@ -110,7 +110,7 @@ describe(genrePath, () => {
     });
 
     it("should return 404 if a valid but non-existent id is provided", async () => {
-      const res = await updateGenre("5ed2d0366f87ac0017f72629", "genre3");
+      const res = await updateGenre("deadbeef", "genre3");
       expect(res.status).toBe(404);
       expect(res.text).toBe("The genre with the given ID was not found.");
     });
