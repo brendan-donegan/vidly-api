@@ -11,3 +11,10 @@ pull_request_rules:
     actions:
       queue:
         name: speculative
+  - name: automatic update for PRs to be merged
+    conditions:
+      - -conflict # skip PRs with conflicts
+      - -draft # filter-out GH draft PRs
+      - label=speculative-merge
+    actions:
+      update:
