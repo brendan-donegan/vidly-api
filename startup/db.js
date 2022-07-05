@@ -9,5 +9,5 @@ module.exports = function () {
       useFindAndModify: false,
       useUnifiedTopology: true,
     })
-    .then(() => logger.info("Connected to MongoDB..."));
+    .then(() => logger.info("Connection established to MongoDB..."));
 };
