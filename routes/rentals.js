@@ -11,7 +11,7 @@ Fawn.init(mongoose);
 
 router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
-  if (errpr) {
+  if (error) {
     return res.status(400).send(error.details[0].message);
   }
   const customer = await Customer.findById(req.body.customerId);
