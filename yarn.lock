@@ -4828,10 +4828,10 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
-winston-mongodb@^5.0.1:
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/winston-mongodb/-/winston-mongodb-5.0.7.tgz#801bca38a21896c242a8a5b4e17a3b969c20ea81"
-  integrity sha512-6uUdd7IPfzKMth1vbO6zPyLQzn57CTNXbyjZmdD9UgBlY19BliFnYcK7+Aopo0GHIsWDo7xlerpj3x/ZULDIpg==
+winston-mongodb@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/winston-mongodb/-/winston-mongodb-5.1.1.tgz#711c502b29a03f95ef7e26eb191db21c16541029"
+  integrity sha512-tlDksYDCsSka6vLzB/cg19B+kRbVH/y9JQdXVXc5r4TSLEgX1Ivj/vHyedYlYzNMAZkSSfexwI/dSDn3f9/Qkg==
   dependencies:
     mongodb "^3.6.2"
     winston-transport "^4.4.0"
