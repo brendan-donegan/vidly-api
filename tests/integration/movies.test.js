@@ -266,6 +266,10 @@ describe("/api/movies", () => {
       const res = await supertest(server)
         .delete(`/api/movies/5ed2d0366f87ac0017f72629`)
         .set("x-auth-token", token);
+      expect(res.status).toBe(404);
+      expect(res.text).toBe(
+        "Could not find movie with id 5ed2d0366f87ac0017f72629"
+      );
     });
   });
 });
