@@ -4,10 +4,6 @@ const logger = require("../logger");
 
 module.exports = function () {
   mongoose
-    .connect(config.get("db"), {
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useUnifiedTopology: true,
-    })
+    .connect(config.get("db"))
     .then(() => logger.info("Connection established to MongoDB..."));
 };

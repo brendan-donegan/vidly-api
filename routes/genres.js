@@ -39,7 +39,7 @@ router.put("/:id", [auth, admin, validId], async (req, res, next) => {
 });
 
 router.delete("/:id", [auth, admin, validId], async (req, res, next) => {
-  const genre = await Genre.findByIdAndRemove(req.params.id);
+  const genre = await Genre.findByIdAndDelete(req.params.id);
   if (!genre) {
     return res.status(404).send();
   }
