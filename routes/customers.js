@@ -56,7 +56,7 @@ router.put("/:id", [auth, admin, validId], async (req, res) => {
 });
 
 router.delete("/:id", [auth, admin, validId], async (req, res) => {
-  const customer = await Customer.findByIdAndRemove(req.params.id);
+  const customer = await Customer.findByIdAndDelete(req.params.id);
   if (!customer) {
     return res
       .status(404)
